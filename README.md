@@ -32,3 +32,4 @@ About the store:
 - Submit a postman collection along with code implementation via email
 - Provide proper documentations or notes about any extra libraries or complex integrations done in the application
 - OPTIONAL (BONUS) Rspec or cucumber tests for the implementations above
+- Please upload your code to a repository and add emails suhas@morphos.is, pawel@morphos.is, and win@morphos.is access to that repo.
