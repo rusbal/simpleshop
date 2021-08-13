@@ -7,6 +7,7 @@ You can add more gems to assist you with your development but not allowed to cha
 ## Agenda of the Task
 
 The scenario is that you are required to create an api server for an ecommerce application.
+If you want to create a web-app instead, please use react components in your implementation with tailwind css using webpacker.
 
 About the users:
 
