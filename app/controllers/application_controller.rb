@@ -1,17 +1,19 @@
 class ApplicationController < ActionController::API
   include Knock::Authenticable
 
-  def success(status = :ok)
+  def success(status: :ok)
     render_status('success', status)
   end
 
-  def failure(status = :unprocessable_entity)
-    render_status('failed', status)
+  def failure(status: :unprocessable_entity, errors: [])
+    render_status('failed', status, errors)
   end
 
   private
 
-  def render_status(readable_status, status)
-    render json: { status: readable_status }, status: status
+  def render_status(readable_status, status, errors = [])
+    data = { status: readable_status }
+    data[:errors] = errors if errors.any?
+    render json: data, status: status
   end
 end
