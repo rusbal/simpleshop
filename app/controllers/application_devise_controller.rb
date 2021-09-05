@@ -1,4 +1,4 @@
-class Api::V1::ApplicationController < Devise::RegistrationsController
+class ApplicationDeviseController < Devise::RegistrationsController
   include Knock::Authenticable
 
   def success(status = :ok)
