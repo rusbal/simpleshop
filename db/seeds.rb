@@ -34,6 +34,6 @@ def create_orders
   end
 end
 
-# create_users
+create_users
 create_regions_and_products
 create_orders
