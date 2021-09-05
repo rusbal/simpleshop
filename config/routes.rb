@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       resources :regions do
         resources :products
       end
+
+      resources :orders
     end
   end
 end
