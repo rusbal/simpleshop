@@ -1,4 +1,4 @@
-class Api::V1::ConfirmationsController < Api::V1::ApplicationController
+class Api::V1::ConfirmationsController < ApplicationDeviseController
   def show
     user = User.find_by(confirmation_token: params[:confirmation_token])
 
