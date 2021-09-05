@@ -25,5 +25,15 @@ def create_regions_and_products
   p "Created #{Product.count} products."
 end
 
-create_users
+def create_orders
+  OrderItem.destroy_all
+  Order.destroy_all
+
+  10.times do
+    FactoryBot.create(:order_item)
+  end
+end
+
+# create_users
 create_regions_and_products
+create_orders
