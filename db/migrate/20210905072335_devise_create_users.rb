@@ -18,6 +18,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.0]
       t.string   :confirmation_token
       t.datetime :confirmed_at
       t.datetime :confirmation_sent_at
+      t.string   :unconfirmed_email
 
       t.string :name, null: false
       t.boolean :admin, default: false
