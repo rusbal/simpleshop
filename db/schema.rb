@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2021_09_05_073823) do
     t.string "title", null: false
     t.string "country", null: false
     t.string "currency", null: false
-    t.integer "tax", default: 0
+    t.integer "tax", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
