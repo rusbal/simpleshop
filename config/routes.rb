@@ -8,7 +8,9 @@ Rails.application.routes.draw do
         confirmations: "api/v1/confirmations",
       }
 
-      resources :regions
+      resources :regions do
+        resources :products
+      end
     end
   end
 end
