@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe OrderCreator do
   let(:user) { create :user }
+  let(:order) { nil }
   let(:shipping_address) { Faker::Address.full_address }
   let(:product_one) { create :product }
   let(:product_two) { create :product }
@@ -12,11 +13,12 @@ RSpec.describe OrderCreator do
     [
       { product: product_one.id, quantity: 1, price: product_one.price },
       { product: product_two.id, quantity: 2, price: product_two.price },
-      { product: product_three.id, quantity: 3, price: product_three.price },
+      { product: product_three.id, quantity: 3, price: product_three.price }
     ]
   end
   let(:params) do
     {
+      order: order,
       user: user.id,
       shipping_address: shipping_address,
       cart_items: cart_items
@@ -27,8 +29,19 @@ RSpec.describe OrderCreator do
 
   it 'creates an order' do
     order = subject
-    expect(order.total).to eq cart_items.sum { |x| x.quantity * x.price }
+    expect(order.total).to eq cart_items.sum { |x| x[:quantity] * x[:price] }
     expect(order.shipping_address).to eq(shipping_address)
     expect(order.user_id).to eq(user.id)
+  end
+
+  context 'creates updaters an order' do
+    let(:order) { create :order }
+
+    it 'updates an existing order' do
+      order = subject
+      expect(order.total).to eq cart_items.sum { |x| x[:quantity] * x[:price] }
+      expect(order.shipping_address).to eq(shipping_address)
+      expect(order.user_id).to eq(user.id)
+    end
   end
 end
