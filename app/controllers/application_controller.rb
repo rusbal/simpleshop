@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
   include Knock::Authenticable
-  undef_method :current_user
 
   def success(status = :ok)
     render_status('success', status)
