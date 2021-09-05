@@ -6,8 +6,8 @@ RSpec.describe OrderItem, type: :model do
     it { should belong_to(:product) }
   end
 
-  # describe 'validations' do
-  #   it { should validate_presence_of(:shipping_address) }
-  #   it { should validate_presence_of(:total) }
-  # end
+  describe 'validations' do
+    it { should validate_presence_of(:quantity) }
+    it { should validate_presence_of(:price) }
+  end
 end
