@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2021_09_05_081905) do
     t.bigint "user_id", null: false
     t.string "shipping_address", null: false
     t.integer "total", null: false
+    t.datetime "paid_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
