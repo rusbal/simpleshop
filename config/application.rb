@@ -24,3 +24,9 @@ module SimpleShop
     config.autoloader = :classic
   end
 end
+
+Rails.application.routes.default_url_options = {
+  protocol: 'http',
+  host: 'locahost',
+  port: 3000
+}
