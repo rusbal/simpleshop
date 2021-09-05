@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_05_073823) do
+ActiveRecord::Schema.define(version: 2021_09_05_075655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "products", force: :cascade do |t|
+    t.bigint "region_id", null: false
+    t.string "title", null: false
+    t.string "description", null: false
+    t.string "image_url", null: false
+    t.integer "price", null: false
+    t.string "sku", null: false
+    t.integer "stock", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["region_id"], name: "index_products_on_region_id"
+  end
 
   create_table "regions", force: :cascade do |t|
     t.string "title", null: false
@@ -42,4 +55,5 @@ ActiveRecord::Schema.define(version: 2021_09_05_073823) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "products", "regions"
 end
