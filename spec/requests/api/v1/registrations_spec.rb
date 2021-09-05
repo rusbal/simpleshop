@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::RegistrationsController, type: :request do
-  describe "POST /" do
+  describe "POST /api/v1/users" do
     let(:name) { Faker::Name.name }
     let(:email) { Faker::Internet.email }
     let(:params) do
