@@ -43,7 +43,7 @@ RSpec.describe Api::V1::RegionsController do
 
     subject { get '/api/v1/regions', headers: headers }
 
-    it 'returns a list of albums with photos' do
+    it 'returns a list of regions with products' do
       subject
       expect(response.parsed_body).to eq(expected_body)
       expect(response.status).to eq(200)
@@ -65,7 +65,7 @@ RSpec.describe Api::V1::RegionsController do
 
   describe 'POST /api/v1/regions' do
     let(:title) { nil }
-    let(:album) { create :album }
+    let(:region) { create :region }
 
     subject { post "/api/v1/regions", params: params, headers: headers }
 
@@ -93,10 +93,10 @@ RSpec.describe Api::V1::RegionsController do
   end
 
   describe 'PATCH /api/v1/regions/:id' do
-    let(:album) { create :region, title: 'Yellow' }
+    let(:region) { create :region, title: 'Yellow' }
     let(:title) { nil }
 
-    subject { patch "/api/v1/regions/#{album.id}", params: params, headers: headers }
+    subject { patch "/api/v1/regions/#{region.id}", params: params, headers: headers }
 
     context 'with valid title' do
       let(:title) { 'Regionti' }
@@ -107,7 +107,7 @@ RSpec.describe Api::V1::RegionsController do
         expect(response.status).to eq(200)
       end
 
-      it 'creates one album' do
+      it 'creates one region' do
         expect { subject }.to change { Region.where(title: title).count }.by(1)
       end
     end
@@ -122,12 +122,12 @@ RSpec.describe Api::V1::RegionsController do
   end
 
   describe 'DELETE /api/v1/regions/:id' do
-    subject { delete "/api/v1/regions/#{album_id}", headers: headers }
+    subject { delete "/api/v1/regions/#{region_id}", headers: headers }
 
     context 'when successful' do
       let(:title) { 'Regionti' }
       let!(:region) { create(:region, title: title) }
-      let(:album_id) { region.id }
+      let(:region_id) { region.id }
 
       it 'returns success status' do
         subject
@@ -141,7 +141,7 @@ RSpec.describe Api::V1::RegionsController do
     end
 
     context 'when it fails' do
-      let(:album_id) { 9 }
+      let(:region_id) { 9 }
 
       it 'returns failed status' do
         subject
