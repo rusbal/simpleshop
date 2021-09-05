@@ -19,5 +19,8 @@ module SimpleShop
     config.generators do |g|
       g.test_framework :rspec
     end
+
+    config.load_defaults 6.0
+    config.autoloader = :classic
   end
 end
