@@ -247,7 +247,7 @@ DEPENDENCIES
   pry-byebug
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.4)
-  rspec-rails
+  rspec-rails (~> 5.0.2)
   sass-rails (>= 6)
   selenium-webdriver
   sidekiq
