@@ -27,6 +27,6 @@ end
 
 Rails.application.routes.default_url_options = {
   protocol: 'http',
-  host: 'locahost',
+  host: 'localhost',
   port: 3000
 }
