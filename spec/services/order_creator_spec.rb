@@ -27,11 +27,36 @@ RSpec.describe OrderCreator do
 
   subject { described_class.run!(params) }
 
-  it 'creates an order' do
-    order = subject
-    expect(order.total).to eq cart_items.sum { |x| x[:quantity] * x[:price] }
-    expect(order.shipping_address).to eq(shipping_address)
-    expect(order.user_id).to eq(user.id)
+  context 'when successful' do
+    let!(:payment_processor_result) { false }
+    let(:paid_at) { payment_processor_result ? DateTime.current : nil }
+
+    before do
+      allow(PaymentProcessor).to receive(:run!).and_return(payment_processor_result)
+    end
+
+    it 'creates an order' do
+      order = subject
+      expect(order.total).to eq cart_items.sum { |x| x[:quantity] * x[:price] }
+      expect(order.shipping_address).to eq(shipping_address)
+      expect(order.user_id).to eq(user.id)
+    end
+
+    context 'when successful' do
+      let(:order) { create :order }
+
+      before do
+        allow(Order).to receive(:create!).and_return(order)
+        allow(OrderPaymentProcessorJob).to receive(:perform_in)
+          .with(1.minute, order_id: order.id, paid_at: paid_at)
+      end
+
+      it 'invokes OrderPaymentProcessorJob' do
+        expect(OrderPaymentProcessorJob).to receive(:perform_in)
+          .with(1.minute, order_id: order.id, paid_at: paid_at)
+        subject
+      end
+    end
   end
 
   context 'creates updaters an order' do

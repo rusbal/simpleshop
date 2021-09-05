@@ -21,14 +21,20 @@ class OrderCreator < ActiveInteraction::Base
           create_items(order, item)
         end
         order.save!
+
+        OrderPaymentProcessorJob.perform_in(1.minute, order_id: order.id, paid_at: payment_processor)
       end
     end
   end
 
   private
 
+  def payment_processor
+    [DateTime.current, nil].sample
+  end
+
   def set_order
-    return order if order.present?
+    return order if order&.present?
 
     Order.create!(user_id: user.id, shipping_address: shipping_address, total: 0)
   rescue ActiveRecord::RecordInvalid => e
