@@ -1,5 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe OrderItem, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'relationships' do
+    it { should belong_to(:order) }
+    it { should belong_to(:product) }
+  end
+
+  # describe 'validations' do
+  #   it { should validate_presence_of(:shipping_address) }
+  #   it { should validate_presence_of(:total) }
+  # end
 end
