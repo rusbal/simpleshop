@@ -1,8 +1,15 @@
 class Api::V1::RegionsController < ApplicationController
   before_action :authenticate_user
-  before_action :set_region, only: [:show, :update, :destroy]
+  before_action :set_region, only: [:update, :destroy]
 
-  def show; end
+  def index
+    @regions = Region.includes(:products)
+  end
+
+  def show
+    @region = Region.where(id: params[:id]).includes(:products).first
+    return failure if @region.nil?
+  end
 
   def create
     region = Region.new(region_params)

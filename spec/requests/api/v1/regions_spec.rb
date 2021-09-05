@@ -10,6 +10,12 @@ RSpec.describe Api::V1::RegionsController do
   end
   let(:json_format) do
     {
+      include: {
+        products: { except: %i[
+          created_at
+          updated_at
+        ] }
+      },
       except: %i[
         created_at
         updated_at
@@ -31,7 +37,20 @@ RSpec.describe Api::V1::RegionsController do
     }
   end
 
-  describe 'GET /regions/:id' do
+  describe 'GET /api/v1/regions' do
+    let!(:regions) { FactoryBot.create_list(:region, 3) }
+    let(:expected_body) { regions.as_json(json_format) }
+
+    subject { get '/api/v1/regions', headers: headers }
+
+    it 'returns a list of albums with photos' do
+      subject
+      expect(response.parsed_body).to eq(expected_body)
+      expect(response.status).to eq(200)
+    end
+  end
+
+  describe 'GET /api/v1/regions/:id' do
     let!(:region) { create(:region) }
     let(:expected_body) { region.as_json(json_format) }
 
@@ -39,12 +58,12 @@ RSpec.describe Api::V1::RegionsController do
 
     it 'returns a region' do
       subject
-      expect(response.parsed_body).to include_json(expected_body)
+      expect(response.parsed_body).to eq(expected_body)
       expect(response.status).to eq(200)
     end
   end
 
-  describe 'POST /regions' do
+  describe 'POST /api/v1/regions' do
     let(:title) { nil }
     let(:album) { create :album }
 
@@ -73,7 +92,7 @@ RSpec.describe Api::V1::RegionsController do
     end
   end
 
-  describe 'PATCH /regions/:id' do
+  describe 'PATCH /api/v1/regions/:id' do
     let(:album) { create :region, title: 'Yellow' }
     let(:title) { nil }
 
@@ -102,7 +121,7 @@ RSpec.describe Api::V1::RegionsController do
     end
   end
 
-  describe 'DELETE /regions/:id' do
+  describe 'DELETE /api/v1/regions/:id' do
     subject { delete "/api/v1/regions/#{album_id}", headers: headers }
 
     context 'when successful' do
