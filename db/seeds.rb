@@ -1,13 +1,16 @@
 def create_users
   User.destroy_all
-  15.times do
-    user = User.new(email: Faker::Internet.email, name: Faker::Name.name)
-    user.password = 'password'
-    user.password_confirmation = 'password'
-    user.skip_confirmation!
-    user.save!
-  end
+  create_user('raymond@philippinedev.com')
+  15.times { create_user(Faker::Internet.email) }
   p "Created #{User.count} users."
+end
+
+def create_user(email)
+  user = User.new(email: email, name: Faker::Name.name)
+  user.password = 'password'
+  user.password_confirmation = 'password'
+  user.skip_confirmation!
+  user.save!
 end
 
 def create_regions_and_products
