@@ -1,6 +1,7 @@
 json.array! @orders do |order|
   json.call(
     order,
+    :id,
     :shipping_address,
     :total,
     :paid_at,

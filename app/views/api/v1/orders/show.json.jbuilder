@@ -1,5 +1,6 @@
 json.call(
   @order,
+  :id,
   :shipping_address,
   :total,
   :paid_at,
