@@ -3,7 +3,7 @@ class ProductPolicy < ApplicationPolicy
   #
   relation_scope do |relation|
     next relation if user.admin?
-    relation.where(user: user)
+    relation
   end
 
   def create?
