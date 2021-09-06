@@ -3,16 +3,18 @@ class Api::V1::RegionsController < ApplicationController
   before_action :set_region, only: [:update, :destroy]
 
   def index
-    @regions = Region.includes(:products)
+    @regions = authorized_scope(Region.includes(:products))
   end
 
   def show
     @region = Region.where(id: params[:id]).includes(:products).first
+    authorize! @region, to: :show?
     return failure if @region.nil?
   end
 
   def create
     region = Region.new(region_params)
+    authorize! region, to: :create?
 
     if region.save
       success
@@ -22,6 +24,7 @@ class Api::V1::RegionsController < ApplicationController
   end
 
   def update
+    authorize! @region, to: :update?
     if @region.update(region_params)
       success
     else
@@ -30,6 +33,7 @@ class Api::V1::RegionsController < ApplicationController
   end
 
   def destroy
+    authorize! @region, to: :destroy?
     if @region.delete
       success
     else

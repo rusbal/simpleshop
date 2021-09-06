@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    action_policy (0.6.0)
+      ruby-next-core (>= 0.11.0)
     actioncable (6.0.4)
       actionpack (= 6.0.4)
       nio4r (~> 2.0)
@@ -195,6 +197,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.2)
+    ruby-next-core (0.12.0)
     rubyzip (2.3.2)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
@@ -260,6 +263,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  action_policy
   active_interaction (~> 4.0)
   bootsnap (>= 1.4.2)
   byebug

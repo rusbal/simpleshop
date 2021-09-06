@@ -8,4 +8,10 @@ class ApplicationPolicy < ActionPolicy::Base
   def show?
     true
   end
+
+  private
+
+  def owner?
+    user.id == record.user_id
+  end
 end

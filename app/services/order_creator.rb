@@ -30,7 +30,7 @@ class OrderCreator < ActiveInteraction::Base
   private
 
   def payment_processor
-    [DateTime.current, nil].sample
+    PaymentProcessor.run!
   end
 
   def set_order

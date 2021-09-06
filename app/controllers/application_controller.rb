@@ -1,5 +1,12 @@
 class ApplicationController < ActionController::API
   include Knock::Authenticable
+  include ActionPolicy::Behaviour
+
+  authorize :user
+
+  def user
+    current_user
+  end
 
   def success(status: :ok)
     render_status('success', status)

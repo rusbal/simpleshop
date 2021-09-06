@@ -32,6 +32,7 @@ gem 'sidekiq'
 gem 'devise'
 gem 'knock'
 gem 'active_interaction', '~> 4.0'
+gem 'action_policy'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

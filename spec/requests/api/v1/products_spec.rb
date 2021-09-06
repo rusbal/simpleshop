@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ProductsController do
   let(:region) { create :region }
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :admin) }
   let(:token) { jwt_sign_in(email: user.email, password: user.password) }
   let(:headers) do
     { authorization: "JWT #{token}" }
@@ -70,6 +70,14 @@ RSpec.describe Api::V1::ProductsController do
 
     subject { post "/api/v1/regions/#{region_id}/products", params: params, headers: headers }
 
+    context 'with invalid title' do
+      it 'returns failed status' do
+        subject
+        expect(response.parsed_body).to eq('status' => 'failed')
+        expect(response.status).to eq(422)
+      end
+    end
+
     context 'with valid title' do
       let(:title) { 'Productti' }
 
@@ -81,14 +89,6 @@ RSpec.describe Api::V1::ProductsController do
 
       it 'creates one product' do
         expect { subject }.to change { Product.where(title: title).count }.by(1)
-      end
-    end
-
-    context 'with invalid title' do
-      it 'returns failed status' do
-        subject
-        expect(response.parsed_body).to eq('status' => 'failed')
-        expect(response.status).to eq(422)
       end
     end
   end

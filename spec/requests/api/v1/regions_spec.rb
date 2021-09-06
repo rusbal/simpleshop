@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::RegionsController do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :admin) }
   let(:token) { jwt_sign_in(email: user.email, password: user.password) }
   let(:headers) do
     { authorization: "JWT #{token}" }

@@ -8,9 +8,10 @@ RSpec.describe RegionPolicy, type: :policy do
 
   let(:policy) { described_class.new(region, user: user) }
 
-  describe "#show?" do
-    subject { policy.apply(:show?) }
+  let(:action) { :show? }
+  subject { policy.apply(action) }
 
+  describe "#show?" do
     it { is_expected.to eq true }
 
     context "when the user is admin" do
@@ -21,7 +22,7 @@ RSpec.describe RegionPolicy, type: :policy do
   end
 
   describe "#create?" do
-    subject { policy.apply(:create?) }
+    let(:action) { :create? }
 
     it "returns false when the user is not admin" do
       is_expected.to eq false
@@ -35,7 +36,7 @@ RSpec.describe RegionPolicy, type: :policy do
   end
 
   describe "#update?" do
-    subject { policy.apply(:update?) }
+    let(:action) { :update? }
 
     it "returns false when the user is not admin" do
       is_expected.to eq false
@@ -49,7 +50,21 @@ RSpec.describe RegionPolicy, type: :policy do
   end
 
   describe "#delete?" do
-    subject { policy.apply(:delete?) }
+    let(:action) { :delete? }
+
+    it "returns false when the user is not admin" do
+      is_expected.to eq false
+    end
+
+    context "when the user is admin" do
+      let(:user) { build_stubbed(:user, :admin) }
+
+      it { is_expected.to eq true }
+    end
+  end
+
+  describe "#destroy?" do
+    let(:action) { :destroy? }
 
     it "returns false when the user is not admin" do
       is_expected.to eq false

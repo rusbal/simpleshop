@@ -40,7 +40,7 @@ RSpec.describe Api::V1::OrdersController do
   end
 
   describe 'GET /api/v1/orders' do
-    let!(:orders) { FactoryBot.create_list(:order, 3) }
+    let!(:orders) { FactoryBot.create_list(:order, 3, user: user) }
     let(:expected_body) { orders.as_json(json_format) }
 
     subject { get '/api/v1/orders', headers: headers }
@@ -53,7 +53,7 @@ RSpec.describe Api::V1::OrdersController do
   end
 
   describe 'GET /api/v1/orders/:id' do
-    let!(:order) { create(:order) }
+    let!(:order) { create(:order, user: user) }
     let(:expected_body) { order.as_json(json_format) }
 
     subject { get "/api/v1/orders/#{order.id}", headers: headers }
@@ -93,7 +93,7 @@ RSpec.describe Api::V1::OrdersController do
   end
 
   describe 'PATCH /api/v1/orders/:id' do
-    let(:order) { create :order }
+    let(:order) { create :order, user: user }
     let(:order_creator_params) { params[:order].merge(order: order) }
 
     subject { patch "/api/v1/orders/#{order.id}", params: params, headers: headers }
@@ -121,7 +121,7 @@ RSpec.describe Api::V1::OrdersController do
   end
 
   describe 'DELETE /api/v1/orders/:id' do
-    let(:order) { create :order }
+    let(:order) { create :order, user: user }
 
     subject { delete "/api/v1/orders/#{order_id}", headers: headers }
 

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe OrderCreator do
-  let(:user) { create :user }
+  let(:user) { create :user, :admin }
   let(:order) { nil }
   let(:shipping_address) { Faker::Address.full_address }
   let(:product_one) { create :product }
@@ -28,8 +28,8 @@ RSpec.describe OrderCreator do
   subject { described_class.run!(params) }
 
   context 'when successful' do
-    let!(:payment_processor_result) { false }
-    let(:paid_at) { payment_processor_result ? DateTime.current : nil }
+    let!(:payment_processor_result) { DateTime.current }
+    let(:paid_at) { payment_processor_result }
 
     before do
       allow(PaymentProcessor).to receive(:run!).and_return(payment_processor_result)
@@ -44,16 +44,19 @@ RSpec.describe OrderCreator do
 
     context 'when successful' do
       let(:order) { create :order }
+      let(:job_params) do
+        {
+          order_id: order.id,
+          paid_at: paid_at
+        }
+      end
 
       before do
         allow(Order).to receive(:create!).and_return(order)
-        allow(OrderPaymentProcessorJob).to receive(:perform_in)
-          .with(1.minute, order_id: order.id, paid_at: paid_at)
       end
 
       it 'invokes OrderPaymentProcessorJob' do
-        expect(OrderPaymentProcessorJob).to receive(:perform_in)
-          .with(1.minute, order_id: order.id, paid_at: paid_at)
+        expect(OrderPaymentProcessorJob).to receive(:perform_in).with(1.minute, job_params)
         subject
       end
     end

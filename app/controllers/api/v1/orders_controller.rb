@@ -3,14 +3,16 @@ class Api::V1::OrdersController < ApplicationController
   before_action :set_order, only: [:show, :update, :destroy]
 
   def index
-    @orders = Order.includes(:order_items)
+    @orders = authorized_scope(Order.includes(:order_items))
   end
 
   def show
     @order = Order.where(id: params[:id]).includes(:order_items).first
+    authorize! @order, to: :show?
   end
 
   def create
+    authorize! Order.new, to: :create?
     OrderCreator.run!(order_params)
     success
   rescue ActiveInteraction::InvalidInteractionError => errors
@@ -18,6 +20,7 @@ class Api::V1::OrdersController < ApplicationController
   end
 
   def update
+    authorize! @order, to: :update?
     OrderCreator.run!(order_params.merge(order: @order))
     success
   rescue ActiveInteraction::InvalidInteractionError => errors
@@ -25,6 +28,7 @@ class Api::V1::OrdersController < ApplicationController
   end
 
   def destroy
+    authorize! @order, to: :destroy?
     if @order.delete
       success
     else
