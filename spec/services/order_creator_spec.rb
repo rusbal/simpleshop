@@ -6,9 +6,12 @@ RSpec.describe OrderCreator do
   let(:user) { create :user, :admin }
   let(:order) { nil }
   let(:shipping_address) { Faker::Address.full_address }
-  let(:product_one) { create :product }
-  let(:product_two) { create :product }
-  let(:product_three) { create :product }
+  let(:stock_one) { 100 }
+  let(:stock_two) { 100 }
+  let(:stock_three) { 100 }
+  let(:product_one) { create :product, stock: stock_one }
+  let(:product_two) { create :product, stock: stock_two }
+  let(:product_three) { create :product, stock: stock_three }
   let(:cart_items) do
     [
       { product: product_one.id, quantity: 1, price: product_one.price },
@@ -59,6 +62,14 @@ RSpec.describe OrderCreator do
         expect(OrderPaymentProcessorJob).to receive(:perform_in).with(1.minute, job_params)
         subject
       end
+    end
+  end
+
+  context 'when failure' do
+    let(:stock_one) { 0 }
+
+    it 'returns error' do
+      expect { subject }.to raise_error ActiveInteraction::InvalidInteractionError
     end
   end
 

@@ -19,9 +19,12 @@ RSpec.describe Api::V1::OrdersController do
     }
   end
   let(:shipping_address) { Faker::Address.full_address }
-  let(:product_one) { create :product }
-  let(:product_two) { create :product }
-  let(:product_three) { create :product }
+  let(:stock_one) { 100 }
+  let(:stock_two) { 100 }
+  let(:stock_three) { 100 }
+  let(:product_one) { create :product, stock: stock_one }
+  let(:product_two) { create :product, stock: stock_two }
+  let(:product_three) { create :product, stock: stock_three }
   let(:cart_items) do
     [
       { product_id: product_one.id, quantity: 1, price: product_one.price },
@@ -83,10 +86,19 @@ RSpec.describe Api::V1::OrdersController do
       end
     end
 
-    context 'invalid order' do
+    context 'when low stock invalidates order' do
+      let(:stock_one) { 0 }
+      let(:error_message) { 'Some error' }
+      let(:error) { ActiveInteraction::InvalidInteractionError.new(error_message) }
+
+      before do
+        allow(OrderCreator).to receive(:run!)
+          .with(order_creator_params).and_raise(error)
+      end
+
       it 'returns failed status' do
         subject
-        expect(response.parsed_body).to include_json(status: 'failed')
+        expect(response.parsed_body).to eq('status' => 'failed', 'errors' => [error_message])
         expect(response.status).to eq(422)
       end
     end
