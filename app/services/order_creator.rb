@@ -18,7 +18,7 @@ class OrderCreator < ActiveInteraction::Base
         order.total = 0
         order.user = user
         order.shipping_address = shipping_address
-        order.order_items.delete_all
+        order.order_items.destroy_all
         cart_items.each do |item|
           create_items(order, item)
         end
