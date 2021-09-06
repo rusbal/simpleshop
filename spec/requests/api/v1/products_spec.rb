@@ -94,7 +94,8 @@ RSpec.describe Api::V1::ProductsController do
   end
 
   describe 'PATCH /api/v1/regions/:region_id/products/:id' do
-    let(:product) { create :product, title: 'Yellow' }
+    let(:old_stock) { 100 }
+    let!(:product) { create :product, title: 'Yellow', stock: old_stock }
     let(:title) { nil }
 
     subject { patch "/api/v1/regions/#{region_id}/products/#{product.id}", params: params, headers: headers }
@@ -118,6 +119,32 @@ RSpec.describe Api::V1::ProductsController do
         subject
         expect(response.parsed_body).to eq('status' => 'failed')
         expect(response.status).to eq(422)
+      end
+    end
+
+    describe 'updating of stock' do
+      let(:user) { create :user }
+      let(:new_stock) { 200 }
+      let(:params) do
+        {
+          product: { stock: new_stock }
+        }
+      end
+
+      context 'customer cannot update stock' do
+        it 'raises error' do
+          expect { subject }.to raise_error ActionPolicy::Unauthorized
+        end
+      end
+
+      context 'admin can update stock' do
+        let(:user) { create :user, :admin }
+
+        it 'creates one product' do
+          expect { subject }.to change { Product.where(stock: 200).count }.by(1)
+          product.reload
+          expect(product.stock).to eq new_stock
+        end
       end
     end
   end

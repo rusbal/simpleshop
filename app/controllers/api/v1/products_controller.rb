@@ -1,6 +1,6 @@
 class Api::V1::ProductsController < ApplicationController
   before_action :authenticate_user
-  before_action :set_product, only: [:show, :update, :destroy]
+  before_action :set_product, only: %i[show update destroy]
 
   def index
     @products = authorized_scope(Product.all)
@@ -23,6 +23,7 @@ class Api::V1::ProductsController < ApplicationController
 
   def update
     authorize! @product, to: :update?
+
     if @product.update(product_params)
       success
     else
