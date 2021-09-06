@@ -29,7 +29,7 @@ RSpec.describe Api::V1::OrdersController do
     [
       { product_id: product_one.id, quantity: 1, price: product_one.price },
       { product_id: product_two.id, quantity: 2, price: product_two.price },
-      { product_id: product_three.id, quantity: 3, price: product_three.price },
+      { product_id: product_three.id, quantity: 3, price: product_three.price }
     ]
   end
   let(:params) do
@@ -39,6 +39,17 @@ RSpec.describe Api::V1::OrdersController do
         shipping_address: shipping_address,
         cart_items: cart_items
       }
+    }
+  end
+  let(:order_creator_params) do
+    {
+      user: user.id,
+      shipping_address: shipping_address,
+      cart_items: [
+        { product: product_one.id, quantity: 1, price: product_one.price },
+        { product: product_two.id, quantity: 2, price: product_two.price },
+        { product: product_three.id, quantity: 3, price: product_three.price }
+      ]
     }
   end
 
@@ -69,8 +80,6 @@ RSpec.describe Api::V1::OrdersController do
   end
 
   describe 'POST /api/v1/orders' do
-    let(:order_creator_params) { params[:order] }
-
     subject { post "/api/v1/orders", params: params, headers: headers }
 
     context 'valid order' do
@@ -106,27 +115,36 @@ RSpec.describe Api::V1::OrdersController do
 
   describe 'PATCH /api/v1/orders/:id' do
     let(:order) { create :order, user: user }
-    let(:order_creator_params) { params[:order].merge(order: order) }
+    let(:updated_order_creator_params) { order_creator_params.merge(order: order) }
 
     subject { patch "/api/v1/orders/#{order.id}", params: params, headers: headers }
 
     context 'valid order' do
       before do
-        allow(OrderCreator).to receive(:run!).with(order_creator_params)
+        allow(OrderCreator).to receive(:run!).with(updated_order_creator_params)
       end
 
       it 'returns success status' do
         subject
         expect(response.parsed_body).to eq('status' => 'success')
         expect(response.status).to eq(200)
-        expect(OrderCreator).to have_received(:run!).with(order_creator_params)
+        expect(OrderCreator).to have_received(:run!).with(updated_order_creator_params)
       end
     end
 
-    context 'invalid order' do
+    context 'when low stock invalidates order' do
+      let(:stock_one) { 0 }
+      let(:error_message) { 'Some error' }
+      let(:error) { ActiveInteraction::InvalidInteractionError.new(error_message) }
+
+      before do
+        allow(OrderCreator).to receive(:run!)
+          .with(updated_order_creator_params).and_raise(error)
+      end
+
       it 'returns failed status' do
         subject
-        expect(response.parsed_body).to include_json(status: 'failed')
+        expect(response.parsed_body).to eq('status' => 'failed', 'errors' => [error_message])
         expect(response.status).to eq(422)
       end
     end

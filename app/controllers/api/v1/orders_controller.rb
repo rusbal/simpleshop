@@ -46,7 +46,7 @@ class Api::V1::OrdersController < ApplicationController
 
   def order_params
     @order_params ||= {
-      user_id: params[:order][:user_id].to_i,
+      user: params[:order][:user_id].to_i,
       shipping_address: params[:order][:shipping_address],
       cart_items: param_cart_items
     }
@@ -56,7 +56,7 @@ class Api::V1::OrdersController < ApplicationController
     params[:order][:cart_items].map do |x|
       {
         price: x[:price].to_i,
-        product_id: x[:product_id].to_i,
+        product: x[:product_id].to_i,
         quantity: x[:quantity].to_i
       }
     end
