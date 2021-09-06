@@ -14,6 +14,9 @@ Here are the gems that I have added.  I'll be happy to discuss them with you in 
 - gem 'shoulda-matchers'
 - gem 'rspec-json_expectations'
 
+## Postman Collection
+- https://www.getpostman.com/collections/d7cf69af87b9843cd4f1
+
 ## Instructions
 
 This is a blank Rails 6 application based on Ruby 2.7.1
