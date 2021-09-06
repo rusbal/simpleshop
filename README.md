@@ -1,5 +1,21 @@
 # Simple Shop
 
+## Documentation by Raymond
+
+Here are the gems that I have added.  I'll be happy to discuss them with you in the interview.
+- gem 'devise'
+- gem 'knock'
+- gem 'active_interaction', '~> 4.0'
+- gem 'action_policy'
+- gem 'pry-byebug'
+- gem 'rspec-rails', '~> 5.0.2'
+- gem 'factory_bot_rails'
+- gem 'faker'
+- gem 'shoulda-matchers'
+- gem 'rspec-json_expectations'
+
+## Instructions
+
 This is a blank Rails 6 application based on Ruby 2.7.1
 This has a docker-compose setup to initialize postgresql DB and Redis servers for your development.
 You can add more gems to assist you with your development but not allowed to change the versions of the current library.
