@@ -1,12 +1,12 @@
 def create_users
   User.destroy_all
-  create_user('raymond@philippinedev.com')
+  create_user('raymond@philippinedev.com', admin: true)
   15.times { create_user(Faker::Internet.email) }
   p "Created #{User.count} users."
 end
 
-def create_user(email)
-  user = User.new(email: email, name: Faker::Name.name)
+def create_user(email, admin: false)
+  user = User.new(email: email, name: Faker::Name.name, admin: admin)
   user.password = 'password'
   user.password_confirmation = 'password'
   user.skip_confirmation!
