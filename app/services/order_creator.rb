@@ -11,9 +11,9 @@ class OrderCreator < ActiveInteraction::Base
   record :order, default: nil
 
   def execute
-    validate!
-
     ActiveRecord::Base.transaction do
+      StockUpdater.run!(cart_items: cart_items)
+
       set_order.tap do |order|
         order.total = 0
         order.user = user
@@ -30,16 +30,6 @@ class OrderCreator < ActiveInteraction::Base
   end
 
   private
-
-  def validate!
-    with_not_enougth_stock.each do |item|
-      errors.add(:base, "Not enough stock for #{item[:product].title}.")
-    end
-  end
-
-  def with_not_enougth_stock
-    cart_items.filter { |x| x[:quantity] > x[:product].stock }
-  end
 
   def payment_processor
     PaymentProcessor.run!
