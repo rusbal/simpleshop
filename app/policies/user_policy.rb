@@ -1,7 +1,7 @@
 class UserPolicy < ApplicationPolicy
   relation_scope do |relation|
     next relation if user.admin?
-    relation.where(user: user)
+    relation.where(id: user.id)
   end
 
   def show?

@@ -12,6 +12,6 @@ class ApplicationPolicy < ActionPolicy::Base
   private
 
   def owner?
-    user.id == record.user_id
+    user.id == record.send(record.is_a?(User) ? :id : :user_id)
   end
 end
