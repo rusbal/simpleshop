@@ -8,6 +8,8 @@ Rails.application.routes.draw do
         confirmations: "api/v1/confirmations",
       }
 
+      get 'users', to: 'users#index'
+
       resources :regions do
         resources :products
       end
